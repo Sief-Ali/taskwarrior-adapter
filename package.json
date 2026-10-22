@@ -1,6 +1,6 @@
 {
   "name": "taskwarrior-adapter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A small, typed Node.js adapter for the Taskwarrior CLI.",
   "license": "MIT",
   "type": "module",
