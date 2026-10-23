@@ -1,7 +1,7 @@
 import { TaskwarriorError } from "./core/errors.js";
 import { TaskExecutor } from "./core/executor.js";
 import type { TaskwarriorClientOptions, TaskwarriorTask } from "./core/types.js";
-import { TaskQueries } from "./operations/queries.js";
+import { TaskOperations } from "./operations/tasks.js";
 
 /**
  * A small wrapper around the Taskwarrior command-line interface.
@@ -12,11 +12,11 @@ import { TaskQueries } from "./operations/queries.js";
  */
 export class TaskwarriorClient {
   private readonly executor: TaskExecutor;
-  private readonly queries: TaskQueries;
+  readonly tasks: TaskOperations;
 
   constructor(options: TaskwarriorClientOptions = {}) {
     this.executor = new TaskExecutor(options);
-    this.queries = new TaskQueries(this.executor);
+    this.tasks = new TaskOperations(this.executor);
   }
 
   /** Returns Taskwarrior's version string without loading its task database. */
@@ -38,11 +38,11 @@ export class TaskwarriorClient {
 
   /** Returns exported tasks without applying a default status filter. */
   listTasks(): Promise<TaskwarriorTask[]> {
-    return this.queries.listTasks();
+    return this.tasks.listTasks();
   }
 
   /** Returns a task by UUID, or null when no matching task exists. */
   getTask(uuid: string): Promise<TaskwarriorTask | null> {
-    return this.queries.getTask(uuid);
+    return this.tasks.getTask(uuid);
   }
 }

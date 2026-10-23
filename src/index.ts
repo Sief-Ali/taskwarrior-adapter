@@ -4,4 +4,9 @@ export type {
   TaskwarriorErrorCode,
   TaskwarriorErrorOptions,
 } from "./core/errors.js";
-export type { TaskwarriorClientOptions, TaskwarriorTask } from "./core/types.js";
+export type {
+  TaskStatus,
+  TaskwarriorClientOptions,
+  TaskwarriorTask,
+} from "./core/types.js";
+export type { TaskQuery } from "./operations/queries.js";

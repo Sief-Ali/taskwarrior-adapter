@@ -10,6 +10,7 @@ installation unless configured otherwise.
 | --- | --- | --- |
 | `pnpm example:read` | [`read-tasks.ts`](../examples/read-tasks.ts) | Get version and list tasks. |
 | `pnpm example:get-task -- <task-uuid>` | [`get-task.ts`](../examples/get-task.ts) | Retrieve a task by UUID and handle no match. |
+| `pnpm example:query -- <project>` | [`query-tasks.ts`](../examples/query-tasks.ts) | Combine project, status, and tag filters. |
 | `pnpm example:configured` | [`configured-client.ts`](../examples/configured-client.ts) | Configure command, time/output bounds, and environment. |
 | `pnpm example:custom-attributes` | [`read-custom-attributes.ts`](../examples/read-custom-attributes.ts) | Read an additional task attribute safely. |
 | `pnpm example:errors` | [`handle-errors.ts`](../examples/handle-errors.ts) | Handle `TaskwarriorError` and unexpected errors. |

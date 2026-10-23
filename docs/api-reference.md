@@ -46,8 +46,33 @@ The type describes common fields (`uuid`, `description`, `status`, `id`, `entry`
 additional fields, including user-defined attributes; the type's index signature
 preserves those values as `unknown`.
 
+## `client.tasks.query()`
+
+Creates a fluent query builder. Supported filters are combined with AND semantics:
+
+```ts
+const tasks = await client.tasks
+  .query()
+  .project("Work")
+  .status("pending")
+  .tag("urgent")
+  .execute();
+```
+
+- `project(value)` selects tasks in the project. Project names can contain spaces.
+- `status(value)` accepts `pending`, `completed`, `deleted`, `waiting`, or `recurring`.
+- `tag(value)` requires a tag; repeated calls require every listed tag. Tag values
+  cannot contain spaces.
+- `execute()` runs the query and returns `Promise<TaskwarriorTask[]>`.
+
+Calling `project()` repeatedly replaces the previous project filter. Calling
+`status()` repeatedly replaces the previous status filter. Project values must
+contain only letters, numbers, spaces, `.`, `_`, or `-`; tag values allow the same
+characters except spaces. Both are limited to 256 characters. Invalid values throw
+`TaskwarriorError` with code `INVALID_FILTER`. The builder intentionally does not
+accept arbitrary Taskwarrior filter expressions.
+
 ## Current scope
 
-The client does not currently expose arbitrary query/filter expressions, mutations,
-or configuration get/set commands. See [examples](./examples.md) for complete
-usage patterns for the supported methods.
+The client does not currently expose mutations or configuration get/set commands.
+See [examples](./examples.md) for complete usage patterns for the supported methods.

@@ -5,7 +5,8 @@ export type TaskwarriorErrorCode =
   | "OUTPUT_LIMIT"
   | "INVALID_JSON"
   | "INVALID_TASK_DATA"
-  | "INVALID_UUID";
+  | "INVALID_UUID"
+  | "INVALID_FILTER";
 
 const taskwarriorErrorMessages: Record<TaskwarriorErrorCode, string> = {
   NOT_INSTALLED: "Taskwarrior is not installed or is unavailable.",
@@ -15,6 +16,7 @@ const taskwarriorErrorMessages: Record<TaskwarriorErrorCode, string> = {
   INVALID_JSON: "Taskwarrior returned data the adapter could not read.",
   INVALID_TASK_DATA: "Taskwarrior returned task data the adapter could not read.",
   INVALID_UUID: "The task UUID is invalid.",
+  INVALID_FILTER: "The task query contains an invalid filter.",
 };
 
 export interface TaskwarriorErrorOptions {

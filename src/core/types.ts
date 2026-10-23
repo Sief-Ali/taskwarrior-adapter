@@ -19,6 +19,8 @@ export interface TaskwarriorTask {
   [attribute: string]: unknown;
 }
 
+export type TaskStatus = "pending" | "completed" | "deleted" | "waiting" | "recurring";
+
 export interface TaskwarriorClientOptions {
   /** CLI executable name or absolute path. Defaults to `task`. */
   commandPath?: string;
