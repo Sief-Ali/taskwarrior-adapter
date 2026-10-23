@@ -26,9 +26,8 @@ const tasks = await taskwarrior.listTasks();
 console.log(`Taskwarrior ${version}: ${tasks.length} exported task(s)`);
 ```
 
-The client reads Taskwarrior's machine-readable export and can create, modify,
-complete, soft-delete, or start tasks using fluent commands. Stopping a task is
-not implemented yet.
+The client reads Taskwarrior's machine-readable export and supports fluent
+commands to create, modify, complete, soft-delete, start, and stop tasks.
 
 See the [API reference](./api-reference.md), [examples](./examples.md), and
 [error handling guide](./errors.md) for more.

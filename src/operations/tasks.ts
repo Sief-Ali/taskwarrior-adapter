@@ -48,4 +48,8 @@ export class TaskOperations {
   start(uuid: string): TaskLifecycleCommand {
     return this.mutations.start(uuid);
   }
+
+  stop(uuid: string): TaskLifecycleCommand {
+    return this.mutations.stop(uuid);
+  }
 }

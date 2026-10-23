@@ -167,7 +167,19 @@ The UUID must be in canonical format. Taskwarrior records the task's start time;
 its status remains `pending`. `execute()` resolves to `Promise<void>` after the
 command succeeds. The task's UUID is validated before the CLI runs.
 
+## `client.tasks.stop(uuid)`
+
+Creates a command that stops work on one task:
+
+```ts
+await client.tasks.stop(taskUuid).execute();
+```
+
+The UUID must be in canonical format. Taskwarrior clears the task's start time;
+the task remains `pending`. `execute()` resolves to `Promise<void>` after the
+command succeeds. The task's UUID is validated before the CLI runs.
+
 ## Current scope
 
-The client does not yet expose stop or configuration get/set
-commands. See [examples](./examples.md) for runnable usage patterns.
+The client does not yet expose configuration get/set commands. See
+[examples](./examples.md) for runnable usage patterns.
