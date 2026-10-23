@@ -2,7 +2,7 @@
 
 A small, typed Node.js/TypeScript library for interacting with [Taskwarrior](https://taskwarrior.org/) through its command-line interface. It is independent of Express and can be used from a backend, script, desktop application, or another Node.js project.
 
-> **Status: early development (`0.1.1`).** The current release is read-only. Create, update, complete, and delete operations are planned after the CLI boundary is verified against Taskwarrior 3.5.0.
+> **Status: early development (`0.2.0`).** The current release is read-only. Create, update, complete, and delete operations are planned after the CLI boundary is verified against Taskwarrior 3.5.0.
 
 - **GitHub:** https://github.com/Sief-Ali/taskwarrior-adapter
 - **npm:** https://www.npmjs.com/package/taskwarrior-adapter
@@ -15,6 +15,7 @@ A small, typed Node.js/TypeScript library for interacting with [Taskwarrior](htt
 - Executes the Taskwarrior CLI using argument arrays rather than shell command strings.
 - Supports custom Taskwarrior configuration and data locations for isolated testing.
 - Provides a typed asynchronous API without tying consumers to a web framework.
+- Provides consistent adapter-owned error codes and stable error messages, with CLI diagnostics kept separately.
 
 ## Requirements
 
@@ -126,7 +127,11 @@ Operations can throw `TaskwarriorError` with a stable error code, including:
 - `INVALID_TASK_DATA`
 - `INVALID_UUID`
 
-Errors may also include CLI arguments, exit code or signal when available, and standard error output. Applications should avoid returning raw error details directly to HTTP clients; decide what to log and expose at the application boundary.
+`TaskwarriorError.code` and `message` provide a stable adapter-level error
+classification and message. The original diagnostic message is available as `detail`,
+with CLI arguments, exit code or signal when available, and standard error output.
+Applications can map adapter errors to their own transport-specific error format;
+avoid returning `detail`, `args`, or `stderr` directly to clients.
 
 ## Safety and design
 
