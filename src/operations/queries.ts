@@ -1,11 +1,10 @@
-import { TaskwarriorError } from "../errors.js";
-import type { TaskwarriorTask } from "../types.js";
+import { TaskwarriorError } from "../core/errors.js";
 import { TaskExecutor } from "../core/executor.js";
+import { isTaskwarriorUuid, validateTaskExportItem } from "../utils/validation.js";
+import type { TaskwarriorTask } from "../core/types.js";
 
-const UUID_PATTERN = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
-
-/** Implements read operations and validates Taskwarrior task exports. */
-export class TaskOperations {
+/** Implements task queries and validates Taskwarrior task exports. */
+export class TaskQueries {
   constructor(private readonly executor: TaskExecutor) {}
 
   async listTasks(): Promise<TaskwarriorTask[]> {
@@ -15,7 +14,7 @@ export class TaskOperations {
   }
 
   async getTask(uuid: string): Promise<TaskwarriorTask | null> {
-    if (!UUID_PATTERN.test(uuid)) {
+    if (!isTaskwarriorUuid(uuid)) {
       throw new TaskwarriorError(
         "INVALID_UUID",
         "Expected a UUID in the canonical 8-4-4-4-12 hexadecimal format.",
@@ -50,7 +49,8 @@ export class TaskOperations {
     }
 
     return parsed.map((value: unknown, index: number): TaskwarriorTask => {
-      if (value === null || typeof value !== "object" || Array.isArray(value)) {
+      const validation = validateTaskExportItem(value);
+      if (!validation.valid && validation.reason === "NOT_OBJECT") {
         throw new TaskwarriorError(
           "INVALID_TASK_DATA",
           `Taskwarrior export item at index ${index} is not a task object.`,
@@ -58,8 +58,7 @@ export class TaskOperations {
         );
       }
 
-      const task = value as Record<string, unknown>;
-      if (typeof task.uuid !== "string" || !UUID_PATTERN.test(task.uuid)) {
+      if (!validation.valid) {
         throw new TaskwarriorError(
           "INVALID_TASK_DATA",
           `Taskwarrior export item at index ${index} has no valid UUID.`,
@@ -68,7 +67,7 @@ export class TaskOperations {
       }
 
       // Preserve Taskwarrior's full object, including user-defined attributes.
-      return task as TaskwarriorTask;
+      return validation.task;
     });
   }
 }

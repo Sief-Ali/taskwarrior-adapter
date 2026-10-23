@@ -1,7 +1,7 @@
-import { TaskwarriorError } from "./errors.js";
+import { TaskwarriorError } from "./core/errors.js";
 import { TaskExecutor } from "./core/executor.js";
-import { TaskOperations } from "./operations/tasks.js";
-import type { TaskwarriorClientOptions, TaskwarriorTask } from "./types.js";
+import type { TaskwarriorClientOptions, TaskwarriorTask } from "./core/types.js";
+import { TaskQueries } from "./operations/queries.js";
 
 /**
  * A small wrapper around the Taskwarrior command-line interface.
@@ -12,11 +12,11 @@ import type { TaskwarriorClientOptions, TaskwarriorTask } from "./types.js";
  */
 export class TaskwarriorClient {
   private readonly executor: TaskExecutor;
-  private readonly tasks: TaskOperations;
+  private readonly queries: TaskQueries;
 
   constructor(options: TaskwarriorClientOptions = {}) {
     this.executor = new TaskExecutor(options);
-    this.tasks = new TaskOperations(this.executor);
+    this.queries = new TaskQueries(this.executor);
   }
 
   /** Returns Taskwarrior's version string without loading its task database. */
@@ -38,11 +38,11 @@ export class TaskwarriorClient {
 
   /** Returns exported tasks without applying a default status filter. */
   listTasks(): Promise<TaskwarriorTask[]> {
-    return this.tasks.listTasks();
+    return this.queries.listTasks();
   }
 
   /** Returns a task by UUID, or null when no matching task exists. */
   getTask(uuid: string): Promise<TaskwarriorTask | null> {
-    return this.tasks.getTask(uuid);
+    return this.queries.getTask(uuid);
   }
 }

@@ -133,10 +133,12 @@ with CLI arguments, exit code or signal when available, and standard error outpu
 Applications can map adapter errors to their own transport-specific error format;
 avoid returning `detail`, `args`, or `stderr` directly to clients.
 
-Internally, the public `TaskwarriorClient` delegates process execution and output
-limits to a core executor, and task export parsing and read operations to a task
-operations module. Its public methods remain unchanged; this separation is an
-implementation detail, not a change to the consumer API.
+Internally, `core/` contains process execution, shared adapter errors, and base
+types; task export parsing and read operations live in `operations/queries.ts`;
+shared UUID and task-export validation lives in `utils/validation.ts`. Mutation
+and configuration modules will be added alongside queries when those operations
+are supported. Public methods and package exports remain unchanged; this
+separation is an implementation detail, not a change to the consumer API.
 
 ## Safety and design
 
