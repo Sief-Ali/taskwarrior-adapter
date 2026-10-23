@@ -128,7 +128,20 @@ The same value constraints as task creation apply: description must be non-empty
 at most 4096 characters, and contain no NUL; project/tag/date values must use
 their documented safe characters; priority is `H`, `M`, or `L`.
 
+## `client.tasks.complete(uuid)`
+
+Creates a command that marks one task completed:
+
+```ts
+await client.tasks.complete(taskUuid).execute();
+```
+
+The UUID must be in canonical format. `execute()` resolves to `Promise<void>` after
+Taskwarrior completes the task. The operation changes the task's status to
+`completed`; it does not delete or purge task data. This is a write operation and
+targets the configured Taskwarrior data.
+
 ## Current scope
 
-The client does not yet expose completion, deletion, start/stop, or configuration
-get/set commands. See [examples](./examples.md) for runnable usage patterns.
+The client does not yet expose deletion, start/stop, or configuration get/set
+commands. See [examples](./examples.md) for runnable usage patterns.

@@ -12,6 +12,7 @@ export type {
 export type { TaskQuery } from "./operations/queries.js";
 export type {
   TaskCreateCommand,
+  TaskLifecycleCommand,
   TaskModifyCommand,
   TaskPriority,
 } from "./operations/mutations.js";

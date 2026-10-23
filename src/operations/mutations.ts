@@ -29,6 +29,10 @@ export interface TaskModifyCommand {
   execute(): Promise<void>;
 }
 
+export interface TaskLifecycleCommand {
+  execute(): Promise<void>;
+}
+
 const TASK_PRIORITIES = new Set<TaskPriority>(["H", "M", "L"]);
 
 /** Builds a validated Taskwarrior add command. */
@@ -225,6 +229,19 @@ class ModifyTaskBuilder implements TaskModifyCommand {
   }
 }
 
+/** Runs a single UUID-targeted Taskwarrior lifecycle command. */
+class TaskLifecycleBuilder implements TaskLifecycleCommand {
+  constructor(
+    private readonly executor: TaskExecutor,
+    private readonly uuid: string,
+    private readonly command: "done",
+  ) {}
+
+  async execute(): Promise<void> {
+    await this.executor.execute([`uuid:${this.uuid}`, this.command]);
+  }
+}
+
 export class TaskMutations {
   constructor(private readonly executor: TaskExecutor) {}
 
@@ -240,5 +257,15 @@ export class TaskMutations {
       );
     }
     return new ModifyTaskBuilder(this.executor, uuid);
+  }
+
+  complete(uuid: string): TaskLifecycleCommand {
+    if (!isTaskwarriorUuid(uuid)) {
+      throw new TaskwarriorError(
+        "INVALID_UUID",
+        "Expected a UUID in the canonical 8-4-4-4-12 hexadecimal format.",
+      );
+    }
+    return new TaskLifecycleBuilder(this.executor, uuid, "done");
   }
 }

@@ -26,7 +26,7 @@ return them to untrusted clients.
 | `OUTPUT_LIMIT` | `Taskwarrior returned more data than the adapter can process.` | Combined stdout and stderr exceed `maxOutputBytes`. |
 | `INVALID_JSON` | `Taskwarrior returned data the adapter could not read.` | Export output is not valid JSON. |
 | `INVALID_TASK_DATA` | `Taskwarrior returned task data the adapter could not read.` | JSON is not an array of objects with valid UUIDs. |
-| `INVALID_UUID` | `The task UUID is invalid.` | `getTask` or a task modification builder receives a value outside the canonical UUID format. |
+| `INVALID_UUID` | `The task UUID is invalid.` | `getTask`, task modification, or a lifecycle command receives a value outside the canonical UUID format. |
 | `INVALID_FILTER` | `The task query contains an invalid filter.` | A query builder project or tag value is malformed, a tag contains spaces, or the status is unsupported. |
 | `INVALID_INPUT` | `The task operation input is invalid.` | A task creation or modification builder has missing or invalid input. |
 

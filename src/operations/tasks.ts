@@ -3,6 +3,7 @@ import type { TaskQuery } from "./queries.js";
 import { TaskMutations } from "./mutations.js";
 import type { TaskCreateCommand } from "./mutations.js";
 import type { TaskModifyCommand } from "./mutations.js";
+import type { TaskLifecycleCommand } from "./mutations.js";
 import type { TaskwarriorTask } from "../core/types.js";
 import { TaskExecutor } from "../core/executor.js";
 
@@ -34,5 +35,9 @@ export class TaskOperations {
 
   modify(uuid: string): TaskModifyCommand {
     return this.mutations.modify(uuid);
+  }
+
+  complete(uuid: string): TaskLifecycleCommand {
+    return this.mutations.complete(uuid);
   }
 }
