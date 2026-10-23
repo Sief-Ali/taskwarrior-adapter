@@ -1,4 +1,4 @@
-import { TaskwarriorClient } from "../src/index.js";
+import { TaskwarriorClient } from "../../src/index.js";
 
 const project = process.argv[2];
 

@@ -1,4 +1,4 @@
-import { TaskwarriorClient, TaskwarriorError } from "../src/index.js";
+import { TaskwarriorClient, TaskwarriorError } from "../../src/index.js";
 
 const client = new TaskwarriorClient();
 

@@ -19,7 +19,7 @@ Choose a guide:
 
 - [Getting started](./docs/getting-started.md) — prerequisites, installation, and first use.
 - [API reference](./docs/api-reference.md) — supported methods, task types, and client options.
-- [Runnable examples](./examples/) — TypeScript programs for the supported methods and options.
+- [Runnable examples](./examples/) — TypeScript programs grouped into `queries/`, `mutations/`, `configuration/`, and `errors/`.
 - [Example guide](./docs/examples.md) — what each example demonstrates and how to run it.
 - [Error handling](./docs/errors.md) — all adapter error codes and how to handle them.
 

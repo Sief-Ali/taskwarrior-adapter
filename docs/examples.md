@@ -1,26 +1,40 @@
 # Examples
 
-Runnable TypeScript files are in the repository's [`examples/`](../examples/)
-directory. Run them from the repository root with the matching pnpm script below.
+Runnable TypeScript files are grouped in the repository's [`examples/`](../examples/)
+directory by capability: [`queries/`](../examples/queries/),
+[`mutations/`](../examples/mutations/), [`configuration/`](../examples/configuration/),
+and [`errors/`](../examples/errors/). Run them from the repository root with the matching pnpm script below.
 They import the local source so they can be run before publishing or installing
 the package. They use your configured Taskwarrior installation unless configured
 otherwise. The create, modify, complete, delete, start, and stop examples write to Taskwarrior; the
 remaining examples are read-only.
 
+### Queries
+
 | Command | File | Demonstrates |
 | --- | --- | --- |
-| `pnpm example:read` | [`read-tasks.ts`](../examples/read-tasks.ts) | Get version and list tasks. |
-| `pnpm example:get-task -- <task-uuid>` | [`get-task.ts`](../examples/get-task.ts) | Retrieve a task by UUID and handle no match. |
-| `pnpm example:query -- <project>` | [`query-tasks.ts`](../examples/query-tasks.ts) | Combine project, status, and tag filters. |
-| `pnpm example:create -- <description...>` | [`create-task.ts`](../examples/create-task.ts) | Create a task with a description. |
-| `pnpm example:modify -- <task-uuid> <new-description...>` | [`modify-task.ts`](../examples/modify-task.ts) | Change a task description by UUID. |
-| `pnpm example:complete -- <task-uuid>` | [`complete-task.ts`](../examples/complete-task.ts) | Mark a task completed by UUID. |
-| `pnpm example:delete -- <task-uuid>` | [`delete-task.ts`](../examples/delete-task.ts) | Soft-delete a task by UUID. |
-| `pnpm example:start -- <task-uuid>` | [`start-task.ts`](../examples/start-task.ts) | Start work on a task by UUID. |
-| `pnpm example:stop -- <task-uuid>` | [`stop-task.ts`](../examples/stop-task.ts) | Stop work on a task by UUID. |
-| `pnpm example:configured` | [`configured-client.ts`](../examples/configured-client.ts) | Configure command, time/output bounds, and environment. |
-| `pnpm example:custom-attributes` | [`read-custom-attributes.ts`](../examples/read-custom-attributes.ts) | Read an additional task attribute safely. |
-| `pnpm example:errors` | [`handle-errors.ts`](../examples/handle-errors.ts) | Handle `TaskwarriorError` and unexpected errors. |
+| `pnpm example:read` | [`read-tasks.ts`](../examples/queries/read-tasks.ts) | Get version and list tasks. |
+| `pnpm example:get-task -- <task-uuid>` | [`get-task.ts`](../examples/queries/get-task.ts) | Retrieve a task by UUID and handle no match. |
+| `pnpm example:query -- <project>` | [`query-tasks.ts`](../examples/queries/query-tasks.ts) | Combine project, status, and tag filters. |
+| `pnpm example:custom-attributes` | [`read-custom-attributes.ts`](../examples/queries/read-custom-attributes.ts) | Read an additional task attribute safely. |
+
+### Mutations
+
+| Command | File | Demonstrates |
+| --- | --- | --- |
+| `pnpm example:create -- <description...>` | [`create-task.ts`](../examples/mutations/create-task.ts) | Create a task with a description. |
+| `pnpm example:modify -- <task-uuid> <new-description...>` | [`modify-task.ts`](../examples/mutations/modify-task.ts) | Change a task description by UUID. |
+| `pnpm example:complete -- <task-uuid>` | [`complete-task.ts`](../examples/mutations/complete-task.ts) | Mark a task completed by UUID. |
+| `pnpm example:delete -- <task-uuid>` | [`delete-task.ts`](../examples/mutations/delete-task.ts) | Soft-delete a task by UUID. |
+| `pnpm example:start -- <task-uuid>` | [`start-task.ts`](../examples/mutations/start-task.ts) | Start work on a task by UUID. |
+| `pnpm example:stop -- <task-uuid>` | [`stop-task.ts`](../examples/mutations/stop-task.ts) | Stop work on a task by UUID. |
+
+### Configuration and errors
+
+| Command | File | Demonstrates |
+| --- | --- | --- |
+| `pnpm example:configured` | [`configured-client.ts`](../examples/configuration/configured-client.ts) | Configure command, time/output bounds, and environment. |
+| `pnpm example:errors` | [`handle-errors.ts`](../examples/errors/handle-errors.ts) | Handle `TaskwarriorError` and unexpected errors. |
 
 Provide a UUID from your own tasks to the `get-task` example. The configured
 client example honors `TASKWARRIOR_COMMAND`, `TASKRC`, and `TASKDATA` environment

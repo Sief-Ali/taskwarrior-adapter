@@ -1,4 +1,4 @@
-import { TaskwarriorClient } from "../src/index.js";
+import { TaskwarriorClient } from "../../src/index.js";
 
 const description = process.argv.slice(2).join(" ");
 

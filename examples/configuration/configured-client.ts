@@ -1,4 +1,4 @@
-import { TaskwarriorClient } from "../src/index.js";
+import { TaskwarriorClient } from "../../src/index.js";
 
 const client = new TaskwarriorClient({
   commandPath: process.env.TASKWARRIOR_COMMAND ?? "task",
