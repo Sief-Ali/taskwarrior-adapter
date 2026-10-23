@@ -40,4 +40,8 @@ export class TaskOperations {
   complete(uuid: string): TaskLifecycleCommand {
     return this.mutations.complete(uuid);
   }
+
+  delete(uuid: string): TaskLifecycleCommand {
+    return this.mutations.delete(uuid);
+  }
 }

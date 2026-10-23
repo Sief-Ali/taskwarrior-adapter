@@ -288,3 +288,31 @@ test("complete command rejects malformed UUIDs before running the CLI", async ()
     (error: unknown) => error instanceof TaskwarriorError && error.code === "INVALID_UUID",
   );
 });
+
+test("delete command marks one UUID deleted and disables confirmation", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("The fake executable uses a POSIX shebang.");
+    return;
+  }
+
+  const fake = await createArgumentEchoCommand();
+  t.after(() => rm(fake.directory, { recursive: true, force: true }));
+  const client = new TaskwarriorClient({
+    commandPath: fake.commandPath,
+    env: { TASKWARRIOR_TEST_ARGS: fake.argsPath },
+  });
+
+  await client.tasks.delete(sampleUuid).execute();
+
+  const args = JSON.parse(await readFile(fake.argsPath, "utf8"));
+  assert.deepEqual(args, ["rc.confirmation=no", `uuid:${sampleUuid}`, "delete"]);
+});
+
+test("delete command rejects malformed UUIDs before running the CLI", async () => {
+  const client = new TaskwarriorClient({ commandPath: "this-command-must-not-run" });
+
+  assert.throws(
+    () => client.tasks.delete("not-a-uuid"),
+    (error: unknown) => error instanceof TaskwarriorError && error.code === "INVALID_UUID",
+  );
+});

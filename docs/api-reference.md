@@ -141,7 +141,21 @@ Taskwarrior completes the task. The operation changes the task's status to
 `completed`; it does not delete or purge task data. This is a write operation and
 targets the configured Taskwarrior data.
 
+## `client.tasks.delete(uuid)`
+
+Creates a command that marks one task deleted:
+
+```ts
+await client.tasks.delete(taskUuid).execute();
+```
+
+The UUID must be in canonical format. This is Taskwarrior's soft-delete operation:
+the task remains in the database with status `deleted` and may still appear in
+exports. The adapter does not invoke `purge`. It disables Taskwarrior's interactive
+confirmation for this UUID-targeted command so it works in non-interactive
+processes. `execute()` resolves to `Promise<void>` after deletion succeeds.
+
 ## Current scope
 
-The client does not yet expose deletion, start/stop, or configuration get/set
+The client does not yet expose start/stop or configuration get/set
 commands. See [examples](./examples.md) for runnable usage patterns.
