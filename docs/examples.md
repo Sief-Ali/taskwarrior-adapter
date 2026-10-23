@@ -1,8 +1,25 @@
 # Examples
 
-All examples use the public package exports. `TaskwarriorClient` methods are
-asynchronous and reject on command or output errors; see
-[error handling](./errors.md).
+Runnable TypeScript files are in the repository's [`examples/`](../examples/)
+directory. Run them from the repository root with the matching pnpm script below.
+They import the local source so they can be run before publishing or installing
+the package. All examples are read-only and use your configured Taskwarrior
+installation unless configured otherwise.
+
+| Command | File | Demonstrates |
+| --- | --- | --- |
+| `pnpm example:read` | [`read-tasks.ts`](../examples/read-tasks.ts) | Get version and list tasks. |
+| `pnpm example:get-task -- <task-uuid>` | [`get-task.ts`](../examples/get-task.ts) | Retrieve a task by UUID and handle no match. |
+| `pnpm example:configured` | [`configured-client.ts`](../examples/configured-client.ts) | Configure command, time/output bounds, and environment. |
+| `pnpm example:custom-attributes` | [`read-custom-attributes.ts`](../examples/read-custom-attributes.ts) | Read an additional task attribute safely. |
+| `pnpm example:errors` | [`handle-errors.ts`](../examples/handle-errors.ts) | Handle `TaskwarriorError` and unexpected errors. |
+
+Provide a UUID from your own tasks to the `get-task` example. The configured
+client example honors `TASKWARRIOR_COMMAND`, `TASKRC`, and `TASKDATA` environment
+variables. Use an isolated configuration/data directory when appropriate.
+
+For API details see the [API reference](./api-reference.md). For all adapter
+error codes and handling guidance see [error handling](./errors.md).
 
 ## Get the Taskwarrior version
 

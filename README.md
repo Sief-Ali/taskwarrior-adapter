@@ -18,7 +18,8 @@ Choose a guide:
 
 - [Getting started](./docs/getting-started.md) — prerequisites, installation, and first use.
 - [API reference](./docs/api-reference.md) — supported methods, task types, and client options.
-- [Examples](./docs/examples.md) — copyable examples for every supported capability.
+- [Runnable examples](./examples/) — TypeScript programs for the supported methods and options.
+- [Example guide](./docs/examples.md) — what each example demonstrates and how to run it.
 - [Error handling](./docs/errors.md) — all adapter error codes and how to handle them.
 
 ## Features
@@ -89,15 +90,18 @@ pnpm test
 pnpm build
 ```
 
-To run the read-only example against your configured Taskwarrior installation:
+Runnable examples use the current Taskwarrior installation and data by default:
 
 ```bash
 pnpm example:read
+pnpm example:get-task -- <task-uuid>
+pnpm example:configured
+pnpm example:custom-attributes
+pnpm example:errors
 ```
 
-The example reads the configured task data and prints a small selection of
-exported tasks. It does not intentionally modify tasks or Taskwarrior
-configuration.
+The examples are read-only. See [the example guide](./docs/examples.md) for
+details and configuration environment variables.
 
 ## Safety and design
 

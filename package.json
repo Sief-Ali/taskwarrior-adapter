@@ -43,6 +43,10 @@
     "test": "tsx --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
     "example:read": "tsx examples/read-tasks.ts",
+    "example:get-task": "tsx examples/get-task.ts",
+    "example:configured": "tsx examples/configured-client.ts",
+    "example:custom-attributes": "tsx examples/read-custom-attributes.ts",
+    "example:errors": "tsx examples/handle-errors.ts",
     "prepublishOnly": "npm run typecheck && npm test && npm run build"
   },
   "devDependencies": {
