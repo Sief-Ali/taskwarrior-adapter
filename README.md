@@ -133,6 +133,11 @@ with CLI arguments, exit code or signal when available, and standard error outpu
 Applications can map adapter errors to their own transport-specific error format;
 avoid returning `detail`, `args`, or `stderr` directly to clients.
 
+Internally, the public `TaskwarriorClient` delegates process execution and output
+limits to a core executor, and task export parsing and read operations to a task
+operations module. Its public methods remain unchanged; this separation is an
+implementation detail, not a change to the consumer API.
+
 ## Safety and design
 
 - Taskwarrior remains the source of truth; the library does not access its internal database.
