@@ -61,38 +61,12 @@ console.log(task);
 
 Use a UUID from your own exported task data in the example above.
 
-## API
+## Documentation
 
-### `getVersion(): Promise<string>`
-
-Runs `task --version` and returns the version output.
-
-### `listTasks(): Promise<TaskwarriorTask[]>`
-
-Returns tasks from Taskwarrior's JSON export. This does not apply an application-level status filter, so the returned set can include tasks in different statuses according to Taskwarrior's export behavior and configuration.
-
-### `getTask(uuid): Promise<TaskwarriorTask | null>`
-
-Looks up a task by UUID. Returns `null` when no matching task is found.
-
-`TaskwarriorTask` describes common fields and preserves additional attributes so custom Taskwarrior fields are not discarded. The current API does not accept arbitrary filter strings; constrained filtering will be designed separately.
-
-## Configuration
-
-```ts
-import { TaskwarriorClient } from "taskwarrior-adapter";
-
-const taskwarrior = new TaskwarriorClient({
-  commandPath: "task",                  // default
-  timeoutMs: 10_000,                    // default
-  maxOutputBytes: 10 * 1024 * 1024,     // default
-  taskrcPath: "/tmp/taskrc",            // optional: sets TASKRC
-  dataLocation: "/tmp/task-data",       // optional: sets TASKDATA
-  env: {},                              // optional environment overrides
-});
-```
-
-`taskrcPath` and `dataLocation` are useful for isolated integration tests. Point them at a dedicated test setup. Do not point tests that perform writes at your everyday Taskwarrior data directory.
+- [Getting started](./docs/getting-started.md): installation, prerequisites, and first use.
+- [API reference](./docs/api-reference.md): methods, task types, and client options.
+- [Examples](./docs/examples.md): examples for every currently supported method and setup option.
+- [Error handling](./docs/errors.md): all adapter error codes, causes, and handling patterns.
 
 ## Development
 
@@ -114,24 +88,6 @@ pnpm example:read
 ```
 
 The example reads the configured task data and prints a small selection of exported tasks. It does not intentionally modify tasks or Taskwarrior configuration.
-
-## Errors
-
-Operations can throw `TaskwarriorError` with a stable error code, including:
-
-- `NOT_INSTALLED`
-- `COMMAND_FAILED`
-- `COMMAND_TIMEOUT`
-- `OUTPUT_LIMIT`
-- `INVALID_JSON`
-- `INVALID_TASK_DATA`
-- `INVALID_UUID`
-
-`TaskwarriorError.code` and `message` provide a stable adapter-level error
-classification and message. The original diagnostic message is available as `detail`,
-with CLI arguments, exit code or signal when available, and standard error output.
-Applications can map adapter errors to their own transport-specific error format;
-avoid returning `detail`, `args`, or `stderr` directly to clients.
 
 Internally, `core/` contains process execution, shared adapter errors, and base
 types; task export parsing and read operations live in `operations/queries.ts`;
