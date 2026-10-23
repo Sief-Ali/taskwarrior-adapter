@@ -2,7 +2,7 @@
 
 A small, typed Node.js/TypeScript library for interacting with [Taskwarrior](https://taskwarrior.org/) through its command-line interface. It is independent of Express and can be used from a backend, script, desktop application, or another Node.js project.
 
-> **Status: early development (`0.1.0`).** The current release is read-only. Create, update, complete, and delete operations are planned after the CLI boundary is verified against Taskwarrior 3.5.0.
+> **Status: early development (`0.1.1`).** The current release is read-only. Create, update, complete, and delete operations are planned after the CLI boundary is verified against Taskwarrior 3.5.0.
 
 - **GitHub:** https://github.com/Sief-Ali/taskwarrior-adapter
 - **npm:** https://www.npmjs.com/package/taskwarrior-adapter
