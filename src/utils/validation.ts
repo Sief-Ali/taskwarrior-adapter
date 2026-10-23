@@ -3,6 +3,7 @@ import type { TaskwarriorTask } from "../core/types.js";
 const UUID_PATTERN = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 const TASK_FILTER_VALUE_PATTERN = /^[\p{L}\p{N}_.-]+(?: [\p{L}\p{N}_.-]+)*$/u;
 const TASK_TAG_PATTERN = /^[\p{L}\p{N}_.-]+$/u;
+const TASK_DUE_VALUE_PATTERN = /^[\p{L}\p{N}_.+-]+$/u;
 
 export type TaskExportItemValidation =
   | { valid: true; task: TaskwarriorTask }
@@ -18,6 +19,10 @@ export function isSafeTaskFilterValue(value: string): boolean {
 
 export function isSafeTaskTag(value: string): boolean {
   return value.length <= 256 && TASK_TAG_PATTERN.test(value);
+}
+
+export function isSafeTaskDueValue(value: string): boolean {
+  return value.length <= 128 && TASK_DUE_VALUE_PATTERN.test(value);
 }
 
 export function validateTaskExportItem(value: unknown): TaskExportItemValidation {

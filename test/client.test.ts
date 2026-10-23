@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { chmod, mkdtemp, rm, writeFile } from "node:fs/promises";
+import { chmod, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -13,16 +13,21 @@ const secondUuid = "b360fc44-315c-4366-b70c-ea7e7520b740";
 async function createArgumentEchoCommand(): Promise<{
   directory: string;
   commandPath: string;
+  argsPath: string;
 }> {
   const directory = await mkdtemp(path.join(os.tmpdir(), "taskwarrior-query-test-"));
   const commandPath = path.join(directory, "fake-task");
+  const argsPath = path.join(directory, "args.json");
   const script = `#!/usr/bin/env node
 const args = process.argv.slice(2);
+if (process.env.TASKWARRIOR_TEST_ARGS) {
+  require("node:fs").writeFileSync(process.env.TASKWARRIOR_TEST_ARGS, JSON.stringify(args));
+}
 process.stdout.write(JSON.stringify([{ uuid: "${sampleUuid}", receivedArgs: args }]));
 `;
   await writeFile(commandPath, script, "utf8");
   await chmod(commandPath, 0o755);
-  return { directory, commandPath };
+  return { directory, commandPath, argsPath };
 }
 
 async function createFakeTaskCommand(): Promise<{ directory: string; commandPath: string }> {
@@ -110,7 +115,10 @@ test("task query builder maps supported filters to individual CLI arguments", as
 
   const fake = await createArgumentEchoCommand();
   t.after(() => rm(fake.directory, { recursive: true, force: true }));
-  const client = new TaskwarriorClient({ commandPath: fake.commandPath });
+  const client = new TaskwarriorClient({
+    commandPath: fake.commandPath,
+    env: { TASKWARRIOR_TEST_ARGS: fake.argsPath },
+  });
   const tasks = await client.tasks
     .query()
     .project("Work Project")
@@ -150,5 +158,54 @@ test("task query builder rejects unsafe filter values before running the CLI", a
     () => client.tasks.query().status("active" as TaskStatus),
     (error: unknown) =>
       error instanceof TaskwarriorError && error.code === "INVALID_FILTER",
+  );
+});
+
+test("task create builder safely adds a description with supported attributes", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("The fake executable uses a POSIX shebang.");
+    return;
+  }
+
+  const fake = await createArgumentEchoCommand();
+  t.after(() => rm(fake.directory, { recursive: true, force: true }));
+  const client = new TaskwarriorClient({
+    commandPath: fake.commandPath,
+    env: { TASKWARRIOR_TEST_ARGS: fake.argsPath },
+  });
+
+  await client.tasks
+    .create()
+    .description("Buy bread & milk")
+    .project("Work Project")
+    .priority("H")
+    .due("tomorrow")
+    .tag("urgent")
+    .execute();
+
+  const args = JSON.parse(await readFile(fake.argsPath, "utf8"));
+  assert.deepEqual(args, [
+    "add",
+    "project:'Work Project'",
+    "priority:H",
+    "due:tomorrow",
+    "+urgent",
+    "--",
+    "Buy bread & milk",
+  ]);
+});
+
+test("task create builder rejects invalid or missing input before running the CLI", async () => {
+  const client = new TaskwarriorClient({ commandPath: "this-command-must-not-run" });
+
+  assert.throws(
+    () => client.tasks.create().description(" \n "),
+    (error: unknown) =>
+      error instanceof TaskwarriorError && error.code === "INVALID_INPUT",
+  );
+  await assert.rejects(
+    () => client.tasks.create().execute(),
+    (error: unknown) =>
+      error instanceof TaskwarriorError && error.code === "INVALID_INPUT",
   );
 });

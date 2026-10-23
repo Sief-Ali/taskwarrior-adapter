@@ -1,14 +1,18 @@
 import { TaskQueries } from "./queries.js";
 import type { TaskQuery } from "./queries.js";
+import { TaskMutations } from "./mutations.js";
+import type { TaskCreateCommand } from "./mutations.js";
 import type { TaskwarriorTask } from "../core/types.js";
 import { TaskExecutor } from "../core/executor.js";
 
 /** Public task namespace that composes the supported task operations. */
 export class TaskOperations {
   private readonly queries: TaskQueries;
+  private readonly mutations: TaskMutations;
 
   constructor(executor: TaskExecutor) {
     this.queries = new TaskQueries(executor);
+    this.mutations = new TaskMutations(executor);
   }
 
   query(): TaskQuery {
@@ -21,5 +25,9 @@ export class TaskOperations {
 
   getTask(uuid: string): Promise<TaskwarriorTask | null> {
     return this.queries.getTask(uuid);
+  }
+
+  create(): TaskCreateCommand {
+    return this.mutations.create();
   }
 }

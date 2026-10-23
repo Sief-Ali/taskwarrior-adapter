@@ -1,6 +1,6 @@
 {
   "name": "taskwarrior-adapter",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A small, typed Node.js adapter for the Taskwarrior CLI.",
   "license": "MIT",
   "type": "module",
@@ -45,6 +45,7 @@
     "example:read": "tsx examples/read-tasks.ts",
     "example:get-task": "tsx examples/get-task.ts",
     "example:query": "tsx examples/query-tasks.ts",
+    "example:create": "tsx examples/create-task.ts",
     "example:configured": "tsx examples/configured-client.ts",
     "example:custom-attributes": "tsx examples/read-custom-attributes.ts",
     "example:errors": "tsx examples/handle-errors.ts",

@@ -72,7 +72,37 @@ characters except spaces. Both are limited to 256 characters. Invalid values thr
 `TaskwarriorError` with code `INVALID_FILTER`. The builder intentionally does not
 accept arbitrary Taskwarrior filter expressions.
 
+## `client.tasks.create()`
+
+Creates a fluent add-command builder. A description is required; project, priority,
+due date, and tags are optional:
+
+```ts
+await client.tasks
+  .create()
+  .description("Buy bread and milk")
+  .project("Home")
+  .priority("H")
+  .due("tomorrow")
+  .tag("errands")
+  .execute();
+```
+
+`execute()` resolves to `Promise<void>` after Taskwarrior successfully adds the
+task. It does not parse human-readable CLI output to guess the generated ID or UUID.
+Descriptions are passed after Taskwarrior's `--` delimiter so description text is
+not interpreted as filters or attributes. The operation writes to the configured
+Taskwarrior data and should be treated as a real mutation.
+
+Project values allow letters, numbers, spaces, `.`, `_`, and `-` (up to 256
+characters). Tags allow the same characters except spaces (up to 256 characters).
+Priority is `H`, `M`, or `L`. Due values are single Taskwarrior date tokens using
+letters, numbers, `.`, `_`, `+`, or `-` (up to 128 characters). Descriptions must
+be non-empty, no longer than 4096 characters, and contain no NUL character.
+Invalid inputs throw `TaskwarriorError` with code `INVALID_INPUT`.
+
 ## Current scope
 
-The client does not currently expose mutations or configuration get/set commands.
-See [examples](./examples.md) for complete usage patterns for the supported methods.
+The client does not yet expose task modification, completion, deletion, start/stop,
+or configuration get/set commands. See [examples](./examples.md) for runnable
+usage patterns.

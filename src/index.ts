@@ -10,3 +10,4 @@ export type {
   TaskwarriorTask,
 } from "./core/types.js";
 export type { TaskQuery } from "./operations/queries.js";
+export type { TaskCreateCommand, TaskPriority } from "./operations/mutations.js";

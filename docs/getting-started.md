@@ -26,8 +26,9 @@ const tasks = await taskwarrior.listTasks();
 console.log(`Taskwarrior ${version}: ${tasks.length} exported task(s)`);
 ```
 
-The client reads Taskwarrior's machine-readable export. This package is read-only:
-it does not create, modify, complete, or delete tasks.
+The client reads Taskwarrior's machine-readable export and can create tasks using
+the fluent `client.tasks.create()` command. Other mutation and lifecycle
+operations are not implemented yet.
 
 See the [API reference](./api-reference.md), [examples](./examples.md), and
 [error handling guide](./errors.md) for more.

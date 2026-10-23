@@ -28,6 +28,7 @@ return them to untrusted clients.
 | `INVALID_TASK_DATA` | `Taskwarrior returned task data the adapter could not read.` | JSON is not an array of objects with valid UUIDs. |
 | `INVALID_UUID` | `The task UUID is invalid.` | `getTask` receives a value outside the canonical UUID format. |
 | `INVALID_FILTER` | `The task query contains an invalid filter.` | A query builder project or tag value is malformed, a tag contains spaces, or the status is unsupported. |
+| `INVALID_INPUT` | `The task operation input is invalid.` | A task creation builder has missing or invalid input. |
 
 Constructor option validation throws `RangeError` rather than `TaskwarriorError`.
 A valid UUID with no matching task is not an error; `getTask` returns `null`.
@@ -58,6 +59,8 @@ function describeError(code: TaskwarriorErrorCode): string {
       return "Provide a task UUID in canonical format.";
     case "INVALID_FILTER":
       return "Use a project or tag value with supported characters.";
+    case "INVALID_INPUT":
+      return "Provide a non-empty description and valid task attributes.";
   }
 }
 
