@@ -25,6 +25,10 @@ export function isSafeTaskDueValue(value: string): boolean {
   return value.length <= 128 && TASK_DUE_VALUE_PATTERN.test(value);
 }
 
+export function isValidTaskDescription(value: string): boolean {
+  return value.trim().length > 0 && value.length <= 4096 && !value.includes("\0");
+}
+
 export function validateTaskExportItem(value: unknown): TaskExportItemValidation {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     return { valid: false, reason: "NOT_OBJECT" };

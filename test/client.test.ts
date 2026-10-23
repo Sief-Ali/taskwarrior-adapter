@@ -209,3 +209,54 @@ test("task create builder rejects invalid or missing input before running the CL
       error instanceof TaskwarriorError && error.code === "INVALID_INPUT",
   );
 });
+
+test("task modify builder targets one UUID and applies partial field/tag changes", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("The fake executable uses a POSIX shebang.");
+    return;
+  }
+
+  const fake = await createArgumentEchoCommand();
+  t.after(() => rm(fake.directory, { recursive: true, force: true }));
+  const client = new TaskwarriorClient({
+    commandPath: fake.commandPath,
+    env: { TASKWARRIOR_TEST_ARGS: fake.argsPath },
+  });
+
+  await client.tasks
+    .modify(sampleUuid)
+    .description("New description & notes")
+    .project("Work Project")
+    .priority("M")
+    .due("tomorrow")
+    .addTag("follow-up")
+    .removeTag("urgent")
+    .execute();
+
+  const args = JSON.parse(await readFile(fake.argsPath, "utf8"));
+  assert.deepEqual(args, [
+    `uuid:${sampleUuid}`,
+    "modify",
+    "project:'Work Project'",
+    "priority:M",
+    "due:tomorrow",
+    "+follow-up",
+    "-urgent",
+    "--",
+    "New description & notes",
+  ]);
+});
+
+test("task modify builder rejects invalid UUIDs and empty modifications", async () => {
+  const client = new TaskwarriorClient({ commandPath: "this-command-must-not-run" });
+
+  assert.throws(
+    () => client.tasks.modify("not-a-uuid"),
+    (error: unknown) => error instanceof TaskwarriorError && error.code === "INVALID_UUID",
+  );
+  await assert.rejects(
+    () => client.tasks.modify(sampleUuid).execute(),
+    (error: unknown) =>
+      error instanceof TaskwarriorError && error.code === "INVALID_INPUT",
+  );
+});

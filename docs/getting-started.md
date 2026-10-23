@@ -26,9 +26,9 @@ const tasks = await taskwarrior.listTasks();
 console.log(`Taskwarrior ${version}: ${tasks.length} exported task(s)`);
 ```
 
-The client reads Taskwarrior's machine-readable export and can create tasks using
-the fluent `client.tasks.create()` command. Other mutation and lifecycle
-operations are not implemented yet.
+The client reads Taskwarrior's machine-readable export and can create or modify
+tasks using the fluent `client.tasks.create()` and `client.tasks.modify(uuid)`
+commands. Completion, deletion, start, and stop operations are not implemented yet.
 
 See the [API reference](./api-reference.md), [examples](./examples.md), and
 [error handling guide](./errors.md) for more.

@@ -5,10 +5,10 @@ A small, typed Node.js/TypeScript library for reading and creating tasks through
 from a backend, script, desktop application, or other Node.js project; it does
 not depend on a web framework.
 
-> **Status: early development (`0.2.2`).** The adapter can check the Taskwarrior
-> version, list and filter exported tasks, retrieve a task by UUID, and create a
-> task. Modification, completion, deletion, start, and stop operations are not
-> implemented yet.
+> **Status: early development (`0.2.3`).** The adapter can check the Taskwarrior
+> version, list and filter exported tasks, retrieve a task by UUID, create a task,
+> and modify selected task fields. Completion, deletion, start, and stop operations
+> are not implemented yet.
 
 - **GitHub:** https://github.com/Sief-Ali/taskwarrior-adapter
 - **npm:** https://www.npmjs.com/package/taskwarrior-adapter
@@ -30,6 +30,7 @@ Choose a guide:
 - Builds constrained queries by project, status, and required tags.
 - Retrieves a task by UUID (returns `null` if there is no match).
 - Creates tasks with a description and optional project, priority, due date, and tags.
+- Modifies a task's description, project, priority, due date, and individual tags by UUID.
 - Preserves additional task attributes not explicitly described in the TypeScript type.
 - Executes the Taskwarrior CLI using argument arrays rather than shell command strings.
 - Supports custom executable, timeout, output limit, configuration, data location, and environment options.
@@ -100,14 +101,15 @@ pnpm example:read
 pnpm example:get-task -- <task-uuid>
 pnpm example:query -- <project>
 pnpm example:create -- <description...>
+pnpm example:modify -- <task-uuid> <new-description...>
 pnpm example:configured
 pnpm example:custom-attributes
 pnpm example:errors
 ```
 
-The create example writes to the configured Taskwarrior data. Other examples
-are read-only. See [the example guide](./docs/examples.md) for details and
-configuration environment variables.
+The create and modify examples write to the configured Taskwarrior data. Other
+examples are read-only. See [the example guide](./docs/examples.md) for details
+and configuration environment variables.
 
 ## Safety and design
 
@@ -115,16 +117,15 @@ configuration environment variables.
 - The adapter prefers machine-readable output over parsing the human-readable terminal table.
 - UUIDs are used for task identity rather than numeric task IDs.
 - The executable is invoked without a shell.
-- Modification, completion, deletion, start/stop, and arbitrary Taskwarrior filter expressions are not included in this release.
+- Completion, deletion, start/stop, and arbitrary Taskwarrior filter expressions are not included in this release.
 - Use a dedicated Taskwarrior data directory for tests; do not use everyday task data for tests that perform writes.
 
 ## Roadmap
 
-1. **Current:** version, export, UUID lookup, constrained queries, and task creation.
-2. Add task modification.
-3. Add completion, soft deletion, start, and stop operations.
-4. Add annotations, dependencies, and other native task operations.
-5. Add reporting helpers after verifying the underlying operations.
+1. **Current:** version, export, UUID lookup, constrained queries, task creation, and task modification.
+2. Add completion, soft deletion, start, and stop operations.
+3. Add annotations, dependencies, and other native task operations.
+4. Add reporting helpers after verifying the underlying operations.
 
 ## License
 

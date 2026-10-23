@@ -101,8 +101,34 @@ letters, numbers, `.`, `_`, `+`, or `-` (up to 128 characters). Descriptions mus
 be non-empty, no longer than 4096 characters, and contain no NUL character.
 Invalid inputs throw `TaskwarriorError` with code `INVALID_INPUT`.
 
+## `client.tasks.modify(uuid)`
+
+Creates a fluent command to modify one task by canonical UUID. Only fields added
+to the builder are changed; unspecified values are left untouched:
+
+```ts
+await client.tasks
+  .modify(taskUuid)
+  .description("Buy bread and milk")
+  .project("Home")
+  .priority("M")
+  .due("tomorrow")
+  .addTag("errands")
+  .removeTag("shopping")
+  .execute();
+```
+
+Supported updates are description, project, priority, due date, and tags. Use
+`addTag()` and `removeTag()` to adjust tags individually. `execute()` returns
+`Promise<void>` after Taskwarrior successfully modifies the matching task. An
+invalid UUID throws `TaskwarriorError` with code `INVALID_UUID`; an empty update
+throws `INVALID_INPUT`.
+
+The same value constraints as task creation apply: description must be non-empty,
+at most 4096 characters, and contain no NUL; project/tag/date values must use
+their documented safe characters; priority is `H`, `M`, or `L`.
+
 ## Current scope
 
-The client does not yet expose task modification, completion, deletion, start/stop,
-or configuration get/set commands. See [examples](./examples.md) for runnable
-usage patterns.
+The client does not yet expose completion, deletion, start/stop, or configuration
+get/set commands. See [examples](./examples.md) for runnable usage patterns.
