@@ -1,21 +1,36 @@
 # Taskwarrior Adapter
 
-A small, typed Node.js/TypeScript library for interacting with [Taskwarrior](https://taskwarrior.org/) through its command-line interface. It is independent of Express and can be used from a backend, script, desktop application, or another Node.js project.
+A small, typed Node.js/TypeScript library for reading task data through the
+[Taskwarrior](https://taskwarrior.org/) command-line interface. It can be used
+from a backend, script, desktop application, or other Node.js project; it does
+not depend on a web framework.
 
-> **Status: early development (`0.2.0`).** The current release is read-only. Create, update, complete, and delete operations are planned after the CLI boundary is verified against Taskwarrior 3.5.0.
+> **Status: early development (`0.2.0`).** The adapter is read-only: it can check
+> the Taskwarrior version, list exported tasks, and retrieve a task by UUID. It
+> does not create, modify, complete, or delete tasks.
 
 - **GitHub:** https://github.com/Sief-Ali/taskwarrior-adapter
 - **npm:** https://www.npmjs.com/package/taskwarrior-adapter
 
+## Documentation
+
+Choose a guide:
+
+- [Getting started](./docs/getting-started.md) — prerequisites, installation, and first use.
+- [API reference](./docs/api-reference.md) — supported methods, task types, and client options.
+- [Examples](./docs/examples.md) — copyable examples for every supported capability.
+- [Error handling](./docs/errors.md) — all adapter error codes and how to handle them.
+
 ## Features
 
-- Reads tasks using Taskwarrior's machine-readable `task export` output.
-- Retrieves a task by UUID.
+- Checks the installed Taskwarrior version.
+- Lists tasks using Taskwarrior's machine-readable `task export` output.
+- Retrieves a task by UUID (returns `null` if there is no match).
 - Preserves additional task attributes not explicitly described in the TypeScript type.
 - Executes the Taskwarrior CLI using argument arrays rather than shell command strings.
-- Supports custom Taskwarrior configuration and data locations for isolated testing.
+- Supports custom executable, timeout, output limit, configuration, data location, and environment options.
 - Provides a typed asynchronous API without tying consumers to a web framework.
-- Provides consistent adapter-owned error codes and stable error messages, with CLI diagnostics kept separately.
+- Provides stable adapter-owned error codes and messages, with CLI diagnostics available separately.
 
 ## Requirements
 
@@ -52,21 +67,14 @@ console.log("Taskwarrior version:", version);
 const tasks = await taskwarrior.listTasks();
 console.log(`Found ${tasks.length} tasks`);
 
-const task = await taskwarrior.getTask(
-  "a360fc44-315c-4366-b70c-ea7e7520b749",
-);
-
-console.log(task);
+if (tasks[0]) {
+  const task = await taskwarrior.getTask(tasks[0].uuid);
+  console.log(task?.description ?? "Task not found");
+}
 ```
 
-Use a UUID from your own exported task data in the example above.
-
-## Documentation
-
-- [Getting started](./docs/getting-started.md): installation, prerequisites, and first use.
-- [API reference](./docs/api-reference.md): methods, task types, and client options.
-- [Examples](./docs/examples.md): examples for every currently supported method and setup option.
-- [Error handling](./docs/errors.md): all adapter error codes, causes, and handling patterns.
+For more examples, [read the examples guide](./docs/examples.md). For failures,
+see [error handling](./docs/errors.md).
 
 ## Development
 
@@ -87,14 +95,9 @@ To run the read-only example against your configured Taskwarrior installation:
 pnpm example:read
 ```
 
-The example reads the configured task data and prints a small selection of exported tasks. It does not intentionally modify tasks or Taskwarrior configuration.
-
-Internally, `core/` contains process execution, shared adapter errors, and base
-types; task export parsing and read operations live in `operations/queries.ts`;
-shared UUID and task-export validation lives in `utils/validation.ts`. Mutation
-and configuration modules will be added alongside queries when those operations
-are supported. Public methods and package exports remain unchanged; this
-separation is an implementation detail, not a change to the consumer API.
+The example reads the configured task data and prints a small selection of
+exported tasks. It does not intentionally modify tasks or Taskwarrior
+configuration.
 
 ## Safety and design
 
@@ -102,7 +105,8 @@ separation is an implementation detail, not a change to the consumer API.
 - The adapter prefers machine-readable output over parsing the human-readable terminal table.
 - UUIDs are used for task identity rather than numeric task IDs.
 - The executable is invoked without a shell.
-- Write operations are not included in this release. When they are added, tests should use isolated Taskwarrior data and ordinary deletion should never invoke `purge`.
+- Write operations and arbitrary task filters are not included in this release.
+- Use a dedicated Taskwarrior data directory for tests; do not use everyday task data for tests that perform writes.
 
 ## Roadmap
 
