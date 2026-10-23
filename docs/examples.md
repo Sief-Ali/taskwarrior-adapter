@@ -4,7 +4,7 @@ Runnable TypeScript files are in the repository's [`examples/`](../examples/)
 directory. Run them from the repository root with the matching pnpm script below.
 They import the local source so they can be run before publishing or installing
 the package. They use your configured Taskwarrior installation unless configured
-otherwise. The create, modify, complete, and delete examples write to Taskwarrior; the
+otherwise. The create, modify, complete, delete, and start examples write to Taskwarrior; the
 remaining examples are read-only.
 
 | Command | File | Demonstrates |
@@ -16,13 +16,14 @@ remaining examples are read-only.
 | `pnpm example:modify -- <task-uuid> <new-description...>` | [`modify-task.ts`](../examples/modify-task.ts) | Change a task description by UUID. |
 | `pnpm example:complete -- <task-uuid>` | [`complete-task.ts`](../examples/complete-task.ts) | Mark a task completed by UUID. |
 | `pnpm example:delete -- <task-uuid>` | [`delete-task.ts`](../examples/delete-task.ts) | Soft-delete a task by UUID. |
+| `pnpm example:start -- <task-uuid>` | [`start-task.ts`](../examples/start-task.ts) | Start work on a task by UUID. |
 | `pnpm example:configured` | [`configured-client.ts`](../examples/configured-client.ts) | Configure command, time/output bounds, and environment. |
 | `pnpm example:custom-attributes` | [`read-custom-attributes.ts`](../examples/read-custom-attributes.ts) | Read an additional task attribute safely. |
 | `pnpm example:errors` | [`handle-errors.ts`](../examples/handle-errors.ts) | Handle `TaskwarriorError` and unexpected errors. |
 
 Provide a UUID from your own tasks to the `get-task` example. The configured
 client example honors `TASKWARRIOR_COMMAND`, `TASKRC`, and `TASKDATA` environment
-variables. The create, modify, complete, and delete examples write to the selected
+variables. The create, modify, complete, delete, and start examples write to the selected
 Taskwarrior data; use an isolated configuration/data directory if you do not want
 to change your normal task list.
 

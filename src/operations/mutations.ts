@@ -234,7 +234,7 @@ class TaskLifecycleBuilder implements TaskLifecycleCommand {
   constructor(
     private readonly executor: TaskExecutor,
     private readonly uuid: string,
-    private readonly command: "done" | "delete",
+    private readonly command: "done" | "delete" | "start",
   ) {}
 
   async execute(): Promise<void> {
@@ -281,5 +281,15 @@ export class TaskMutations {
       );
     }
     return new TaskLifecycleBuilder(this.executor, uuid, "delete");
+  }
+
+  start(uuid: string): TaskLifecycleCommand {
+    if (!isTaskwarriorUuid(uuid)) {
+      throw new TaskwarriorError(
+        "INVALID_UUID",
+        "Expected a UUID in the canonical 8-4-4-4-12 hexadecimal format.",
+      );
+    }
+    return new TaskLifecycleBuilder(this.executor, uuid, "start");
   }
 }

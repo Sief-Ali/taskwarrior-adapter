@@ -44,4 +44,8 @@ export class TaskOperations {
   delete(uuid: string): TaskLifecycleCommand {
     return this.mutations.delete(uuid);
   }
+
+  start(uuid: string): TaskLifecycleCommand {
+    return this.mutations.start(uuid);
+  }
 }

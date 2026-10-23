@@ -155,7 +155,19 @@ exports. The adapter does not invoke `purge`. It disables Taskwarrior's interact
 confirmation for this UUID-targeted command so it works in non-interactive
 processes. `execute()` resolves to `Promise<void>` after deletion succeeds.
 
+## `client.tasks.start(uuid)`
+
+Creates a command that starts work on one task:
+
+```ts
+await client.tasks.start(taskUuid).execute();
+```
+
+The UUID must be in canonical format. Taskwarrior records the task's start time;
+its status remains `pending`. `execute()` resolves to `Promise<void>` after the
+command succeeds. The task's UUID is validated before the CLI runs.
+
 ## Current scope
 
-The client does not yet expose start/stop or configuration get/set
+The client does not yet expose stop or configuration get/set
 commands. See [examples](./examples.md) for runnable usage patterns.
